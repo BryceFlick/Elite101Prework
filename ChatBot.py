@@ -12,7 +12,7 @@ class Chatbot:
         self.pants = pants
         self.hat = hat
 
-        # SML inner dictionary
+        # talk about this
         self.prices = {
             "hat": {"small": 10.0, "medium": 12.0, "large": 14.0},
             "shirt": {"small": 15.0, "medium": 18.0, "large": 21.0},
@@ -25,7 +25,7 @@ class Chatbot:
         time.sleep(0.3)
         print(f"\nWelcome {self.name}!")
         time.sleep(0.25)
-        print(f"Let's look at some cool styles for {self.age}-year-olds.")
+        print(f"Let's look at some cool styles for {self.age} year olds.")
 
     # Store menu
     def store_Menu(self):
@@ -40,12 +40,12 @@ class Chatbot:
                     "4. Leave the site\n"
                 ))
 
-                if navigate == 1:
-                    print("\nWhat we are selling:")
+                if navigate == 1:  # talk about this
+                    print("\nHere’s what we’re selling:")
                     for item, sizes in self.prices.items():
                         print(f"\n{item.capitalize()}:")
                         for size, price in sizes.items():
-                            print(f"  {size.capitalize()} - ${price:.2f}")
+                            print(f"{size.capitalize()} - ${price:.2f}")
 
                 elif navigate == 2:
                     self.GoToCart()
@@ -74,12 +74,12 @@ class Chatbot:
             except (ValueError, TypeError):
                 print("Please enter a valid number.")
 
-    # check money
+    # Check money
     def check_money(self):
         time.sleep(0.25)
         print(f"You have ${self.money:.2f} in your account.")
 
-    # exit
+    # Exit
     def exit(self):
         time.sleep(1)
         print(f"Bye! See you soon {self.name}")
@@ -110,7 +110,16 @@ class Chatbot:
 
         if cost <= self.money:
             self.money -= cost
-            setattr(self, item, getattr(self, item) + quantity)
+
+            if item == "hat":
+                self.hat += quantity
+            elif item == "shirt":
+                self.shirt += quantity
+            elif item == "socks":
+                self.socks += quantity
+            elif item == "pants":
+                self.pants += quantity
+
             print(f"Your card was accepted... You bought {quantity} {size} {item}(s) for ${cost:.2f}.")
             self.check_money()
         else:
@@ -118,7 +127,7 @@ class Chatbot:
 
 
 def main():
-    name = input("What is your name? ").capitalize()
+    name = input("What is your name? ").title()
     time.sleep(.5)
         
     while True:
