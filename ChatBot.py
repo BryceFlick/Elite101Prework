@@ -12,12 +12,12 @@ class Chatbot:
         self.pants = pants
         self.hat = hat
 
-        # Store prices
+        # SML inner dictionary
         self.prices = {
-            "hat": 12.0,
-            "shirt": 18.0,
-            "socks": 2.0,
-            "pants": 21.0
+            "hat": {"small": 10.0, "medium": 12.0, "large": 14.0},
+            "shirt": {"small": 15.0, "medium": 18.0, "large": 21.0},
+            "socks": {"small": 1.5, "medium": 2.0, "large": 2.5},
+            "pants": {"small": 18.0, "medium": 21.0, "large": 24.0},
         }
 
     # Welcome Function
@@ -41,9 +41,11 @@ class Chatbot:
                 ))
 
                 if navigate == 1:
-                    print("What we are selling:")
-                    for item, price in self.prices.items():
-                        print(f"{item.capitalize()}: ${price:.2f}")
+                    print("\nWhat we are selling:")
+                    for item, sizes in self.prices.items():
+                        print(f"\n{item.capitalize()}:")
+                        for size, price in sizes.items():
+                            print(f"  {size.capitalize()} - ${price:.2f}")
 
                 elif navigate == 2:
                     self.GoToCart()
@@ -93,25 +95,30 @@ class Chatbot:
             print("Sorry, we don’t sell that item.")
             return
 
+        size = input("Choose a size (small/medium/large): ").lower()
+        if size not in self.prices[item]:
+            print("Invalid size.")
+            return
+
         try:
             quantity = int(input("How many do you want to buy? "))
         except (ValueError, TypeError):
             print("Please enter an integer for the quantity.")
             return
 
-        cost = self.prices[item] * quantity
+        cost = self.prices[item][size] * quantity
 
         if cost <= self.money:
             self.money -= cost
             setattr(self, item, getattr(self, item) + quantity)
-            print(f"Your card was accepted...You bought {quantity} {item}(s) for ${cost:.2f}.")
+            print(f"Your card was accepted... You bought {quantity} {size} {item}(s) for ${cost:.2f}.")
             self.check_money()
         else:
-            print("Your card declined...please add more money to your account.")
+            print("Your card declined... please add more money to your account.")
 
 
 def main():
-    name = input("What is your name? ")
+    name = input("What is your name? ").capitalize()
     time.sleep(.5)
         
     while True:
